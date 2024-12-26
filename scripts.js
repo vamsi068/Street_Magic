@@ -123,7 +123,7 @@ function generateBill() {
     bill += "            DOOR.NO:48-11/3-5C,\n";
     bill += "            NEW CURRENCY NAGAR,\n";
     bill += "                  6th LANE,\n";
-    bill += "         BESIDE VIJETHA SUPERMARKET,\n";
+    bill += "          Anjaneya Swami Temple Road,\n";
     bill += "              VIJAYAWADA-520008\n";
     bill += "                MO: 8885999948\n";
     bill += "---------------------------------------------\n";
