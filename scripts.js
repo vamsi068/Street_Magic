@@ -243,3 +243,17 @@ function updateFontSize() {
     billElement.style.fontSize = `${fontSize}px`;
 }
 
+   function filterMenu() {
+            const searchInput = document.getElementById('menu-search').value.toLowerCase();
+            const menuItems = document.querySelectorAll('#menu-list li');
+
+            menuItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchInput)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
