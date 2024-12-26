@@ -28,11 +28,13 @@
 
   <div class="side-headings">
     <h3>Quick Navigation</h3>
-     <form class="search-container" action="/search" method="get">
-            <input type="text" name="q" placeholder="Search here..." required>
+    
+       <div class="search-container">
+            <input type="text" id="menu-search" placeholder="Search here..." oninput="filterMenu()">
+      
             <button type="submit">Search</button>
         </form>
-    <ul>
+    <ul id="menu-list">
       <li><a href="#burgers">Burgers</a></li>
       <li><a href="#sandwichs">Sandwichs</a></li>
       <li><a href="#Pizzas">Pizzas</a></li>
