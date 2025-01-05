@@ -4135,6 +4135,21 @@
       <button onclick="generateBill()">Generate Bill</button>
       <button onclick="downloadBill()">Download Bill</button>
       <button onclick="printBill()">Print Bill</button>
+      <button onclick="Order()">Order</button>
+
+      <div>
+        <label>
+            <input type="radio" name="pickup-type" value="Pickup" checked> Pickup
+            <input type="radio" name="pickup-type" value="Table"> Table
+        </label>
+      </div>
+
+      <select id="order-type">
+        <option value="Pickup">Pickup</option>
+        <option value="Table">Table</option>
+        <option value="Zomato">Zomato</option>
+        <option value="Swiggy">Swiggy</option>
+      </select>
 
       <section id="inventory" class="inventory">
         <h2>Inventory Status</h2>
