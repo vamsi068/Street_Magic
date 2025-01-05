@@ -268,6 +268,10 @@ function Order() {
     const pickupTypeElement = document.querySelector('input[name="pickup-type"]:checked');
     const pickupType = pickupTypeElement ? pickupTypeElement.value : "Pickup";
 
+    // Get the selected table number
+    const tableNumberElement = document.getElementById('table-number');
+    const tableNumber = tableNumberElement ? tableNumberElement.value : "N/A";
+
     // Prepare the order bill
     let orderBill = "         STREET MAGIC\n";
     orderBill += "      DOOR.NO:48-11/3-5C,\n";
@@ -279,6 +283,7 @@ function Order() {
     orderBill += "---------------------------------------------\n";
     orderBill += `Date: ${date}       ${time}\n`;
     orderBill += `Pickup Type: ${pickupType}\n`;
+    orderBill += `Table Number: ${tableNumber}\n`;
     orderBill += "---------------------------------------------\n";
     orderBill += "No. Item                  Qty\n";
     orderBill += "---------------------------------------------\n";
