@@ -4120,8 +4120,6 @@
     </div>
 
 
-  </section>
-
   <section id="cart" class="cart">
     <h2>Cart</h2>
     <div id="cart-items">
@@ -4136,12 +4134,24 @@
       <button onclick="downloadBill()">Download Bill</button>
       <button onclick="printBill()">Print Bill</button>
       <button onclick="Order()">Order</button>
+      <button onclick="exportOrderHistory()">Export Order History</button>
+
 
       <div>
         <label>
             <input type="radio" name="pickup-type" value="Pickup" checked> Pickup
             <input type="radio" name="pickup-type" value="Table"> Table
         </label>
+      </div>
+
+
+      <div>
+        <select id="cashier">
+            <option value="Vamsi">Vamsi</option>
+            <option value="Sai">Sai</option>
+            <option value="Surya Kumari">Surya Kumari</option>
+            <option value="Srinivasa Rao">Srinivasa Rao</option>
+        </select>
       </div>
 
       <select id="order-type">
