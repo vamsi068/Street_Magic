@@ -4043,7 +4043,7 @@
       <h2>Soft drinks</h2>
       <div class="menu-items">
         <div class="menu-item">
-          <img src="softdrinks/coke.jpg" alt="coco-cola" onclick="addToCart('coco-cola', 20, parseInt(document.getElementById('quantity-coco-cola').value))">
+          <img src="softdrinks/coke.jpg" alt="coco-cola" onclick="addToCart('coco-cola', 30, parseInt(document.getElementById('quantity-coco-cola').value))">
           <h3>coco-cola</h3>
           <p><strong>Price: ₹20</strong></p>
           <div class="quantity">
@@ -4073,7 +4073,7 @@
           </div>
         </div>
         <div class="menu-item">
-          <img src="softdrinks/thumbs up.jpg" alt="thumbs up" onclick="addToCart('thumbs up', 149, parseInt(document.getElementById('quantity-thumbs up').value))">
+          <img src="softdrinks/thumbs up.jpg" alt="thumbs up" onclick="addToCart('thumbs up', 20, parseInt(document.getElementById('quantity-thumbs up').value))">
           <h3>thumbs up</h3>
           <p><strong>Price: ₹20</strong></p>
           <div class="quantity">
@@ -4134,17 +4134,25 @@
       <button onclick="downloadBill()">Download Bill</button>
       <button onclick="printBill()">Print Bill</button>
       <button onclick="Order()">Order</button>
-      <button onclick="exportOrderHistory()">Export Order History</button>
 
-
+      <div>
+        <select id="table-number" required>
+            <option value="" disabled selected>Select Table</option>
+            <option value="1">Table 1</option>
+            <option value="2">Table 2</option>
+            <option value="3">Table 3</option>
+            <option value="4">Table 4</option>
+            <option value="5">Table 5</option>
+        </select>
+      </div>
+      
       <div>
         <label>
             <input type="radio" name="pickup-type" value="Pickup" checked> Pickup
             <input type="radio" name="pickup-type" value="Table"> Table
         </label>
       </div>
-
-
+      
       <div>
         <select id="cashier">
             <option value="Vamsi">Vamsi</option>
