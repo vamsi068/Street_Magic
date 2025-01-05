@@ -98,11 +98,6 @@ function removeItem(index) {
     updateInventoryDisplay();
 }
 
-
-
-
-
-
 function generateBill() {
     if (cart.length === 0) {
         alert("Cart is empty. Add items to generate a bill.");
@@ -110,27 +105,48 @@ function generateBill() {
     }
 
     const now = new Date();
-    const date = now.toLocaleDateString();
+    const date = now.toLocaleDateString(); // Current date in string format (e.g., "01/04/2025")
     const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const paymentAmount = parseFloat(document.getElementById("payment-amount").value);
+    const orderType = document.getElementById("order-type").value; // Get the selected order type
 
     if (isNaN(paymentAmount) || paymentAmount <= 0) {
         alert("Please enter a valid payment amount.");
         return;
     }
 
-    let bill = "               Street Magic\n";
-    bill += "            DOOR.NO:48-11/3-5C,\n";
-    bill += "            NEW CURRENCY NAGAR,\n";
-    bill += "                  6th LANE,\n";
-    bill += "          Anjaneya Swami Temple Road,\n";
-    bill += "              VIJAYAWADA-520008\n";
-    bill += "                MO: 8885999948\n";
+    // Get the last token number and date from localStorage
+    const lastTokenData = JSON.parse(localStorage.getItem("tokenData")) || { date: "", tokenNumber: 0 };
+
+    let tokenNumber;
+    if (lastTokenData.date === date) {
+        // Same day, increment the token number
+        tokenNumber = lastTokenData.tokenNumber + 1;
+    } else {
+        // New day, reset token number to 1
+        tokenNumber = 1;
+    }
+
+    // Update localStorage with the new token number and date
+    localStorage.setItem(
+        "tokenData",
+        JSON.stringify({ date: date, tokenNumber: tokenNumber })
+    );
+
+    // Add logo as ASCII art or a placeholder
+    let bill = "         STREET MAGIC\n";
+    bill += "      DOOR.NO:48-11/3-5C,\n";
+    bill += "        CURRENCY NAGAR,\n";
+    bill += "           6th LANE,\n";
+    bill += "  Anjaneya Swami Temple Road,\n";
+    bill += "       VIJAYAWADA-520008\n";
+    bill += "         MO: 8885999948\n";
     bill += "---------------------------------------------\n";
-    bill += `Date: ${date}  ${time}\n`;
-    bill += `Cashier: Vamsi  BillNo: ${billCount}\n`;
+    bill += `Date: ${date}       ${time}\n`;
+    bill += `Cashier: Vamsi     BillNo: ${billCount}\n`;
+    bill += `Token Number: ${tokenNumber}      ${orderType}\n`;
     bill += "----------------------------------------------\n";
-    bill += "No. Item            Qty   Price     Amount\n";
+    bill += "No. Item    Qty    Price Amount\n";
     bill += "----------------------------------------------\n";
 
     let index = 1;
@@ -139,24 +155,24 @@ function generateBill() {
 
     cart.forEach((item) => {
         let itemName = item.name;
-        if (itemName.length > 13) {
-            // Split the item name into two lines if it exceeds 15 characters
-            const firstLine = itemName.slice(0, 13); // First 15 characters
-            const secondLine = itemName.slice(13);  // Remaining characters
-            bill += `${index.toString().padEnd(2)} ${firstLine}\n`; // Print the first line
-            bill += `${''.padEnd(2)} ${secondLine.padEnd(17)} ${item.quantity.toString().padEnd(5)} ₹${item.price.toString().padEnd(9)} ₹${item.totalPrice.toString().padEnd(4)}\n`; // Print the second line
-        } else {
-            // Single-line item name
-            bill += `${index.toString().padEnd(2)} ${itemName.padEnd(17)} ${item.quantity.toString().padEnd(5)} ₹${item.price.toString().padEnd(9)} ₹${item.totalPrice.toString().padEnd(4)}\n`;
-        }item.totalPrice;
+        grandTotal += item.totalPrice;
         totalQty += item.quantity;
+
+        if (itemName.length > 13) {
+            const firstLine = itemName.slice(0, 28);
+            const secondLine = itemName.slice(12);
+            bill += `${index.toString().padEnd(2)} ${firstLine}\n`;
+            bill += `${''.padEnd(1)} ${secondLine.padEnd(8)} ${item.quantity.toString().padEnd(4)} ₹${item.price.toString().padEnd(3)} ₹${item.totalPrice.toString().padEnd(1)}\n`;
+        } else {
+            bill += `${index.toString().padEnd(1)} ${itemName.padEnd(12)} ${item.quantity.toString().padEnd(4)} ₹${item.price.toString().padEnd(3)} ₹${item.totalPrice.toString().padEnd(1)}\n`;
+        }
         index++;
     });
 
     const change = paymentAmount - grandTotal;
 
     bill += "----------------------------------------------\n";
-    bill += `Total Qty: ${totalQty.toString().padEnd(15)} Sub Total: ₹${grandTotal}\n`;
+    bill += `Total Qty: ${totalQty.toString().padEnd(3)} Sub Total: ₹${grandTotal}\n`;
     bill += `Grand Total: ₹${grandTotal}\n`;
     if (change >= 0) {
         bill += `Payment: ₹${paymentAmount}\n`;
@@ -166,16 +182,13 @@ function generateBill() {
         bill += `Balance Due: ₹${Math.abs(change)}\n`;
     }
     bill += "------------------------------------------\n";
-    bill += "           Thanks for Visiting!\n";
+    bill += "     Thanks for Visiting!\n";
 
-    // Display the bill in the generated-bill element
     const billElement = document.getElementById("generated-bill");
     billElement.textContent = bill;
     billCount++;
 
     localStorage.setItem("billCount", billCount);
-
-    // Mark the bill as generated
     billGenerated = true;
 
     updateCart();
@@ -189,9 +202,6 @@ function printBill() {
         return;
     }
 
-
-
-    // Create a new window for printing
     const printWindow = window.open('', '', 'width=800,height=600');
     printWindow.document.write(`
         <html>
@@ -203,7 +213,6 @@ function printBill() {
                     padding: 20px;
                     margin: 0;
                 }
-                    
                 pre {
                     font-size: 14px;
                     line-height: 1.6;
@@ -216,12 +225,12 @@ function printBill() {
         </html>
     `);
 
-    // Print and close the window
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
     printWindow.close();
 }
+
 function downloadBill() {
     if (!billGenerated) {
         alert("Please generate the bill first.");
@@ -235,6 +244,7 @@ function downloadBill() {
     link.download = "Street_Magic_Bill.txt";
     link.click();
 }
+
 function updateFontSize() {
     const fontSize = document.getElementById("font-size").value;
     const billElement = document.getElementById("generated-bill");
@@ -243,17 +253,75 @@ function updateFontSize() {
     billElement.style.fontSize = `${fontSize}px`;
 }
 
-   function filterMenu() {
-            const searchInput = document.getElementById('menu-search').value.toLowerCase();
-            const menuItems = document.querySelectorAll('#menu-list li');
 
-            menuItems.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                if (text.includes(searchInput)) {
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
+function Order() {
+    if (cart.length === 0) {
+        alert("Cart is empty. Add items to generate an order bill.");
+        return;
+    }
+
+    const now = new Date();
+    const date = now.toLocaleDateString(); // Current date in string format (e.g., "01/05/2025")
+    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // Get the pickup type (default to "Pickup" if not selected)
+    const pickupTypeElement = document.querySelector('input[name="pickup-type"]:checked');
+    const pickupType = pickupTypeElement ? pickupTypeElement.value : "Pickup";
+
+    // Prepare the order bill
+    let orderBill = "         STREET MAGIC\n";
+    orderBill += "      DOOR.NO:48-11/3-5C,\n";
+    orderBill += "        CURRENCY NAGAR,\n";
+    orderBill += "           6th LANE,\n";
+    orderBill += "  Anjaneya Swami Temple Road,\n";
+    orderBill += "       VIJAYAWADA-520008\n";
+    orderBill += "         MO: 8885999948\n";
+    orderBill += "---------------------------------------------\n";
+    orderBill += `Date: ${date}       ${time}\n`;
+    orderBill += `Pickup Type: ${pickupType}\n`;
+    orderBill += "---------------------------------------------\n";
+    orderBill += "No. Item                  Qty\n";
+    orderBill += "---------------------------------------------\n";
+
+    let totalItems = 0;
+
+    cart.forEach((item, index) => {
+        orderBill += `${(index + 1).toString().padEnd(2)} ${item.name.padEnd(20)} ${item.quantity.toString().padEnd(4)}\n`;
+        totalItems += item.quantity;
+    });
+
+    orderBill += "---------------------------------------------\n";
+    orderBill += `Total Items: ${totalItems}\n`;
+    orderBill += "---------------------------------------------\n";
+    orderBill += "     Thanks for Visiting!\n";
+
+    // Open print window for the order bill
+    const printWindow = window.open('', '', 'width=800,height=600');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Street Magic - Order Bill</title>
+            <style>
+                body {
+                    font-family: 'Courier New', Courier, monospace;
+                    padding: 20px;
+                    margin: 0;
                 }
-            });
-        }
+                pre {
+                    font-size: 14px;
+                    line-height: 1.6;
+                }
+            </style>
+        </head>
+        <body>
+            <pre>${orderBill}</pre>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+}
 
