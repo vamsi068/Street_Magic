@@ -324,4 +324,3 @@ function Order() {
     printWindow.print();
     printWindow.close();
 }
-
