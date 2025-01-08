@@ -255,35 +255,39 @@ function updateFontSize() {
 
 
 function Order() {
-    if (cart.length === 0) {
+    // Check if the cart is empty
+    if (!cart || cart.length === 0) {
         alert("Cart is empty. Add items to generate an order bill.");
         return;
     }
 
     const now = new Date();
-    const date = now.toLocaleDateString(); // Current date in string format (e.g., "01/05/2025")
+    const date = now.toLocaleDateString(); // Current date (e.g., "01/05/2025")
     const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     // Get the pickup type (default to "Pickup" if not selected)
     const pickupTypeElement = document.querySelector('input[name="pickup-type"]:checked');
     const pickupType = pickupTypeElement ? pickupTypeElement.value : "Pickup";
 
-    // Get the selected table number
+    // Get the selected table number (only if pickup type is "Table")
     const tableNumberElement = document.getElementById('table-number');
-    const tableNumber = tableNumberElement ? tableNumberElement.value : "N/A";
+    const tableNumber = (pickupType === "Table" && tableNumberElement && tableNumberElement.value)
+        ? tableNumberElement.value
+        : null;
 
-    // Prepare the order bill
+    // Prepare the order bill with uppercase address
     let orderBill = "         STREET MAGIC\n";
-    orderBill += "      DOOR.NO:48-11/3-5C,\n";
-    orderBill += "        CURRENCY NAGAR,\n";
-    orderBill += "           6th LANE,\n";
-    orderBill += "  Anjaneya Swami Temple Road,\n";
-    orderBill += "       VIJAYAWADA-520008\n";
+    orderBill += "        CURRENCY NAGAR,\n".toUpperCase();
+    orderBill += "           6TH LANE,\n".toUpperCase();
+    orderBill += "  ANJANEYA SWAMI TEMPLE ROAD,\n".toUpperCase();
+    orderBill += "       VIJAYAWADA-520008\n".toUpperCase();
     orderBill += "         MO: 8885999948\n";
     orderBill += "---------------------------------------------\n";
     orderBill += `Date: ${date}       ${time}\n`;
     orderBill += `Pickup Type: ${pickupType}\n`;
-    orderBill += `Table Number: ${tableNumber}\n`;
+    if (tableNumber) {
+        orderBill += `Table Number: ${tableNumber}\n`;
+    }
     orderBill += "---------------------------------------------\n";
     orderBill += "No. Item                  Qty\n";
     orderBill += "---------------------------------------------\n";
@@ -291,41 +295,48 @@ function Order() {
     let totalItems = 0;
 
     cart.forEach((item, index) => {
-        orderBill += `${(index + 1).toString().padEnd(2)} ${item.name.padEnd(20)} ${item.quantity.toString().padEnd(4)}\n`;
+        orderBill += `${(index + 1).toString().padEnd(3)} ${item.name.padEnd(20)} ${item.quantity.toString().padStart(4)}\n`;
         totalItems += item.quantity;
     });
 
     orderBill += "---------------------------------------------\n";
     orderBill += `Total Items: ${totalItems}\n`;
     orderBill += "---------------------------------------------\n";
-    orderBill += "     Thanks for Visiting!\n";
+    orderBill += "     THANKS FOR VISITING!\n"; // Changed this to uppercase too
 
-    // Open print window for the order bill
+    // Open a new window for printing the order bill
     const printWindow = window.open('', '', 'width=800,height=600');
-    printWindow.document.write(`
-        <html>
-        <head>
-            <title>Street Magic - Order Bill</title>
-            <style>
-                body {
-                    font-family: 'Courier New', Courier, monospace;
-                    padding: 20px;
-                    margin: 0;
-                }
-                pre {
-                    font-size: 14px;
-                    line-height: 1.6;
-                }
-            </style>
-        </head>
-        <body>
-            <pre>${orderBill}</pre>
-        </body>
-        </html>
-    `);
 
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+    if (printWindow) {
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Street Magic - Order Bill</title>
+                <style>
+                    body {
+                        font-family: 'Courier New', Courier, monospace;
+                        padding: 20px;
+                        margin: 0;
+                        text-align: center;
+                    }
+                    pre {
+                        font-size: 14px;
+                        line-height: 1.6;
+                        text-align: left;
+                    }
+                </style>
+            </head>
+            <body>
+                <pre>${orderBill}</pre>
+            </body>
+            </html>
+        `);
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    } else {
+        alert("Popup blocker is enabled. Please disable it to print the order bill.");
+    }
 }
