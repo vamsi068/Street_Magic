@@ -3408,13 +3408,32 @@
     <p id="cart-total">Total: ₹0</p>
     <div class="payment">
       <h3>Payment</h3>
+      
       <label for="payment-amount">Enter Payment Amount: </label>
       <input type="number" id="payment-amount" placeholder="Enter amount">
-      <button onclick="generateBill()">Generate Bill</button>
-      <button onclick="downloadBill()">Download Bill</button>
-      <button onclick="printBill()">Print Bill</button>
-      <button onclick="Order()">Order</button>
 
+      <!-- Replace buttons with Unicode symbols -->
+      <span 
+        onclick="generateBill()" 
+        style="cursor: pointer; font-size: 24px; margin: 0 10px;" 
+        title="Generate Bill">🧾
+      </span>
+      <span 
+        onclick="downloadBill()" 
+        style="cursor: pointer; font-size: 24px; margin: 0 10px;" 
+        title="Download Bill">⬇️
+      </span>
+      <span 
+        onclick="printBill()" 
+        style="cursor: pointer; font-size: 24px; margin: 0 10px;" 
+        title="Print Bill">🖨️
+      </span>
+      <span 
+        onclick="Order()" 
+        style="cursor: pointer; font-size: 24px; margin: 0 10px;" 
+        title="Order">🛒
+      </span>
+      
       <div>
         <select id="table-number" required>
             <option value="" disabled selected>Select Table</option>
@@ -3426,20 +3445,12 @@
         </select>
       </div>
       
+
       <div>
         <label>
             <input type="radio" name="pickup-type" value="Pickup" checked> Pickup
             <input type="radio" name="pickup-type" value="Table"> Table
         </label>
-      </div>
-      
-      <div>
-        <select id="cashier">
-            <option value="Vamsi">Vamsi</option>
-            <option value="Sai">Sai</option>
-            <option value="Surya Kumari">Surya Kumari</option>
-            <option value="Srinivasa Rao">Srinivasa Rao</option>
-        </select>
       </div>
 
       <select id="order-type">
@@ -3454,7 +3465,7 @@
         <div id="inventory-status">
             <!-- Inventory stock will be displayed here -->
         </div>
-    </section>
+      </section>
       <pre id="generated-bill" class="bill-container"></pre>
     </div>
   </section>
